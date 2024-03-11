@@ -50,13 +50,15 @@ public class LogIn {
      * Nothing. Will provide print statements when the method is called.
      */
 
-    void userAuthorize(String username, String password) {
+    public void userAuthorize(String username, String password) {
         /*
         * This method will cross-reference the username and password inputs
         * with the database. If the username doesn't match,
         * then print out an error message stating the username is invalid
         * same for password.
         */
+        throw new IllegalArgumentException("Username has not been authorized");
+        throw new IllegalArgumentException("Password has not been authorized");
     }
 
 
