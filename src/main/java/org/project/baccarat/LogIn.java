@@ -39,8 +39,8 @@ public class LogIn {
     /*
      * Method: userAuthroize
      * --------------------
-     * Compares the inputs with the database to see if there is a match and will return error messages accordingly
-     * if not.
+     * Compares the inputs with the database to see if there is a match
+     * and will return error messages accordingly if not.
      *
      * Parameters:
      * - username: a string
@@ -52,9 +52,10 @@ public class LogIn {
 
     void userAuthorize(String username, String password) {
         /*
-        * This method will cross-reference the username and password inputs with the database.
-        * if the username doesn't match, then print out an error message stating the username is invalid
-        * Same for password.
+        * This method will cross-reference the username and password inputs
+        * with the database. If the username doesn't match,
+        * then print out an error message stating the username is invalid
+        * same for password.
         */
     }
 
