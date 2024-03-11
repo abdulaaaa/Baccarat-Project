@@ -46,8 +46,12 @@ public class UserPage {
         return winningRatio;
     }
 
-    public void setWinningRatio(float winningRatio) {
-        this.winningRatio = winningRatio;
+    public void setWinningRatio() {
+        if (totalGames == 0) {
+            winningRatio = 0;
+        } else {
+            winningRatio = (float) totalWins /totalGames;
+        }
     }
 
     public int getTotalGames() {
