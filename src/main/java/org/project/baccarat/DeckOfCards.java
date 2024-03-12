@@ -10,12 +10,32 @@
 
 package org.project.baccarat;
 
+import com.sun.source.tree.NewArrayTree;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class DeckOfCards {
     private List<Card> sevenDeckOfCards;
+    private List<Card> usedCards;
+
+    public List<Card> getSevenDeckOfCards() {
+        return sevenDeckOfCards;
+    }
+
+    public void setSevenDeckOfCards(List<Card> sevenDeckOfCards) {
+        this.sevenDeckOfCards = sevenDeckOfCards;
+    }
+
+    public List<Card> getUsedCards() {
+        return usedCards;
+    }
+
+    public void setUsedCards(List<Card> usedCards) {
+        this.usedCards = usedCards;
+    }
+
 
     public List<Card> getSevenDeckOfCardsDeck() {
         return sevenDeckOfCards;
@@ -23,6 +43,7 @@ public class DeckOfCards {
 
     public DeckOfCards() {
         sevenDeckOfCards = new ArrayList<>();
+        usedCards = new ArrayList<>();
         initializeDeck();
         shuffleDeck();
     }
