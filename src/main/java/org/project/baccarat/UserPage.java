@@ -50,7 +50,8 @@ public class UserPage {
         if (totalGames == 0) {
             winningRatio = 0;
         } else {
-            winningRatio = (float) totalWins /totalGames;
+            winningRatio =
+                    Math.round((float) totalWins /totalGames * 100) / 100f;
         }
     }
 
@@ -97,6 +98,7 @@ public class UserPage {
     public boolean addMoney(int money) {
         if (money >= 1000 && money <= 50000) {
             amountOfMoney += money;
+            System.out.println("Money has been successfully added!");
             return true;
             // need to update the amountOfMoney value in the database when this
             // method is called
