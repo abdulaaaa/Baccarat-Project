@@ -58,6 +58,9 @@ enum Rank {
     }
 
     public int getValue() {
+        if (value >= 10) {
+            return 0;
+        }
         return value;
     }
 }

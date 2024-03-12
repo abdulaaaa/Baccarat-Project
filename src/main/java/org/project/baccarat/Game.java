@@ -7,6 +7,7 @@ public class Game {
     private int bankerCards;
     private float ratioForBankerPlayerTie;
     private int placedBetAmount;
+    private float amountOfMoney; // change this later
 
     public int getPlayerCards() {
         return playerCards;
@@ -47,6 +48,14 @@ public class Game {
         this.placedBetAmount = placedBetAmount;
     }
 
+    public float getAmountOfMoney() {
+        return amountOfMoney;
+    }
+
+    public void setAmountOfMoney(float amountOfMoney) {
+        this.amountOfMoney = amountOfMoney;
+    }
+
     public Game(int playerCards, int bankerCards, float ratioForBankerPlayerTie,
                 int placedBetAmount) {
         this.playerCards = playerCards;
@@ -58,6 +67,12 @@ public class Game {
     DeckOfCards deck = new DeckOfCards();
     List<Card> sevenDeckOfCards = deck.getSevenDeckOfCards();
     List<Card> usedDeckOfCards = deck.getUsedCards();
+    Card playerHitCard;
+
+    public void transferCards() {
+        usedDeckOfCards.add(sevenDeckOfCards.get(0));
+        sevenDeckOfCards.remove(0);
+    }
 
 
     public int cardsChosen() {
@@ -66,15 +81,12 @@ public class Game {
             if ((sevenDeckOfCards.get(0).getRank().getValue() >= 2) &&
                     (sevenDeckOfCards.get(0).getRank().getValue() <= 9)) {
                 cardValue += sevenDeckOfCards.get(0).getRank().getValue();
-                usedDeckOfCards.add(sevenDeckOfCards.get(0));
-                sevenDeckOfCards.remove(0);
+                transferCards();
             } else if (sevenDeckOfCards.get(0).getRank().getValue() == 1) {
                 cardValue++;
-                usedDeckOfCards.add(sevenDeckOfCards.get(0));
-                sevenDeckOfCards.remove(0);
+                transferCards();
             } else {
-                usedDeckOfCards.add(sevenDeckOfCards.get(0));
-                sevenDeckOfCards.remove(0);
+                transferCards();
             }
         }
 
@@ -86,6 +98,67 @@ public class Game {
         bankerCards = cardsChosen();
     }
 
+    public void determineTheWinner() {
+        if ((playerCards > bankerCards) && (ratioForBankerPlayerTie == 1)) {
+            amountOfMoney += placedBetAmount + placedBetAmount *
+                    ratioForBankerPlayerTie;
+            System.out.println("Congratulations you won: " +
+                    (placedBetAmount * ratioForBankerPlayerTie));
+        } else if ((bankerCards > playerCards) &&
+                (ratioForBankerPlayerTie == 0.95)) {
+            amountOfMoney += placedBetAmount + placedBetAmount *
+                    ratioForBankerPlayerTie;
+            System.out.println("Congratulations you won: " +
+                    (placedBetAmount * ratioForBankerPlayerTie));
+        } else if ((bankerCards == playerCards) &&
+                ratioForBankerPlayerTie == 8) {
+            amountOfMoney += placedBetAmount + placedBetAmount *
+                    ratioForBankerPlayerTie;
+            System.out.println("Congratulations you won: " +
+                    (placedBetAmount * ratioForBankerPlayerTie));
+        } else {
+            amountOfMoney -= placedBetAmount;
+            System.out.println("You Lost");
+        }
+    }
+
+    public void updateAmountOfMoney() {
+        if ((playerCards == 8) || (playerCards == 9) || (bankerCards == 8) ||
+                (bankerCards == 9)) {
+            determineTheWinner();
+            return;
+        }
+        if ((playerCards >= 0) && (playerCards <= 5)) {
+            if (sevenDeckOfCards.get(0).getRank().getValue() < 10) {
+                // this is hit logic
+                playerHitCard = sevenDeckOfCards.get(0);
+                playerCards += sevenDeckOfCards.get(0).getRank().getValue();
+                transferCards();
+                playerCards %= 10;
+            }
+
+            if ((bankerCards >= 0) && (bankerCards <= 2)) {
+                if (sevenDeckOfCards.get(0).getRank().getValue() < 10) {
+                    // this is hit logic
+                    bankerCards += sevenDeckOfCards.get(0).getRank().getValue();
+                    transferCards();
+                    bankerCards %= 10;
+                    determineTheWinner();
+                    return;
+                }
+            } else if ((bankerCards >= 3) && (bankerCards <= 6)) {
+                switch (bankerCards) {
+                    case 3:
+                        if ((playerHitCard.getRank().getValue() >= 1) &&
+                                (playerHitCard.getRank().getValue() <= 10) &&
+                                (playerHitCard.getRank().getValue() != 8)) {
+
+                        }
+
+                }
+            }
+        }
+    }
 
 
     ;
