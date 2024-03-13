@@ -120,8 +120,13 @@ public class Game {
      */
 
     public void transferCards() {
-        usedDeckOfCards.add(sevenDeckOfCards.get(0));
-        sevenDeckOfCards.remove(0);
+        try {
+            usedDeckOfCards.add(sevenDeckOfCards.get(0));
+            sevenDeckOfCards.remove(0);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("There is no more cards in the" +
+                    " deck.");
+        }
     }
 
     /*
