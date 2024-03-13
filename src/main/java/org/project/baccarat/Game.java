@@ -56,8 +56,8 @@ public class Game {
             case 2 -> ratioForBankerPlayerTie = 8;
             case 3 -> ratioForBankerPlayerTie = (float) 0.95;
             default ->
-                    throw new IllegalArgumentException("Please choose a valid " +
-                            "option.");
+                    throw new IllegalArgumentException("Please choose a valid "
+                            + "option.");
         }
     }
 
@@ -95,12 +95,13 @@ public class Game {
 
     Card playerHitCard;
 
-    public int HitThirdCard(int bankerOrPlayerCards) {
-        bankerOrPlayerCards += sevenDeckOfCards.get(0).getRank().getValue();
+    public int hitThirdCard(int thirdCardValue) {
+        thirdCardValue += sevenDeckOfCards.get(0).getRank().getValue();
         transferCards();
 
         // remove the 1st digit for playerCards.
-        return bankerOrPlayerCards % 10;
+
+        return thirdCardValue % 10;
     }
 
     /*
@@ -146,7 +147,7 @@ public class Game {
 
         for (int i = 0; i < 2; i++) {
 
-            // If the card is 1-9 (1 is Ace) (2-9 us number value
+            // If the card is 1-9 (1 is Ace) (2-9 us number value)
 
             if ((sevenDeckOfCards.get(0).getRank().getValue() >= 1) &&
                     (sevenDeckOfCards.get(0).getRank().getValue() <= 9)) {
@@ -154,14 +155,11 @@ public class Game {
                 // increment cardValue based on the rank
 
                 cardValue += sevenDeckOfCards.get(0).getRank().getValue();
-                transferCards();
-            } else {
-
-                /* No need to increment cardValue is it is either 10, King,
-                   Queen, or Jack. */
-
-                transferCards();
             }
+
+            // no need to increment value for cards like 10, King, Queen, Jack.
+
+            transferCards();
         }
 
         // Remove the 1st digit of the card and return it.
@@ -187,6 +185,13 @@ public class Game {
         bankerCards = cardsChosen();
     }
 
+    public void playerWon() {
+        amountOfMoney += placedBetAmount + placedBetAmount *
+                ratioForBankerPlayerTie;
+        System.out.println("Congratulations you won: " +
+                (placedBetAmount * ratioForBankerPlayerTie));
+    }
+
     /*
      * Method: determineTheWinner
      * --------------------
@@ -206,28 +211,19 @@ public class Game {
         // Player won and Player chosen.
 
         if ((playerCards > bankerCards) && (ratioForBankerPlayerTie == 1)) {
-            amountOfMoney += placedBetAmount + placedBetAmount *
-                    ratioForBankerPlayerTie;
-            System.out.println("Congratulations you won: " +
-                    (placedBetAmount * ratioForBankerPlayerTie));
+            playerWon();
 
             // Banker won and Banker chosen.
 
         } else if ((bankerCards > playerCards) &&
                 (ratioForBankerPlayerTie == 0.95)) {
-            amountOfMoney += placedBetAmount + placedBetAmount *
-                    ratioForBankerPlayerTie;
-            System.out.println("Congratulations you won: " +
-                    (placedBetAmount * ratioForBankerPlayerTie));
+            playerWon();
 
             // Tie and Tie chosen
 
         } else if ((bankerCards == playerCards) &&
                 ratioForBankerPlayerTie == 8) {
-            amountOfMoney += placedBetAmount + placedBetAmount *
-                    ratioForBankerPlayerTie;
-            System.out.println("Congratulations you won: " +
-                    (placedBetAmount * ratioForBankerPlayerTie));
+            playerWon();
 
             // User chose wrong
 
@@ -235,6 +231,11 @@ public class Game {
             amountOfMoney -= placedBetAmount;
             System.out.println("You Lost");
         }
+    }
+
+    public void bankerHitThirdCardAndDetermineWinner() {
+        bankerCards = hitThirdCard(bankerCards);
+        determineTheWinner();
     }
 
     public void updateAmountOfMoney() {
@@ -254,18 +255,16 @@ public class Game {
             // track the player hit third card.
 
             playerHitCard = sevenDeckOfCards.get(0);
-            playerCards = HitThirdCard(playerCards);
+            playerCards = hitThirdCard(playerCards);
 
             if ((bankerCards >= 0) && (bankerCards <= 2)) {
-                bankerCards = HitThirdCard(bankerCards);
-                determineTheWinner();
+                bankerHitThirdCardAndDetermineWinner();
                 return;
             } else if ((bankerCards >= 3) && (bankerCards <= 7)) {
                 switch (bankerCards) {
                     case 3:
                         if (playerHitCard.getRank().getValue() != 8) {
-                            bankerCards = HitThirdCard(bankerCards);
-                            determineTheWinner();
+                            bankerHitThirdCardAndDetermineWinner();
                             return;
                         }
                         break;
@@ -274,8 +273,7 @@ public class Game {
                                 (playerHitCard.getRank().getValue() != 8) &&
                                 (playerHitCard.getRank().getValue() != 9) &&
                                 (playerHitCard.getRank().getValue() != 0)) {
-                            bankerCards = HitThirdCard(bankerCards);
-                            determineTheWinner();
+                            bankerHitThirdCardAndDetermineWinner();
                             return;
                         }
                         break;
@@ -286,16 +284,14 @@ public class Game {
                                 (playerHitCard.getRank().getValue() != 8) &&
                                 (playerHitCard.getRank().getValue() != 9) &&
                                 (playerHitCard.getRank().getValue() != 0)) {
-                            bankerCards = HitThirdCard(bankerCards);
-                            determineTheWinner();
+                            bankerHitThirdCardAndDetermineWinner();
                             return;
                         }
                         break;
                     case 6:
                         if ((playerHitCard.getRank().getValue() == 6) ||
                                 (playerHitCard.getRank().getValue() == 7)) {
-                            bankerCards = HitThirdCard(bankerCards);
-                            determineTheWinner();
+                            bankerHitThirdCardAndDetermineWinner();
                             return;
                         }
                         break;
@@ -303,15 +299,14 @@ public class Game {
                         determineTheWinner();
                         return;
                     default:
-                        throw new IllegalArgumentException("Erro with the " +
+                        throw new IllegalArgumentException("Error with the " +
                                 "third card chosen");
 
                 }
             }
         } else {
             if ((bankerCards >= 0) && (bankerCards <= 5)) {
-                bankerCards = HitThirdCard(bankerCards);
-                determineTheWinner();
+                bankerHitThirdCardAndDetermineWinner();
                 return;
             } else {
                 determineTheWinner();
