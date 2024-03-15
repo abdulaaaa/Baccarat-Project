@@ -58,7 +58,8 @@ public class LogIn {
         * same for password.
         */
         throw new IllegalArgumentException("Username has not been authorized");
-        throw new IllegalArgumentException("Password has not been authorized");
+        //throw new IllegalArgumentException("Password has not been
+        // authorized");
     }
 
 

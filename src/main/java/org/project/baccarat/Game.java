@@ -17,6 +17,7 @@ public class Game {
     private float ratioForBankerPlayerTie;  // the chosen ratio
     private int placedBetAmount;
     private float amountOfMoney; // change this later
+    private int chosenOption;
 
     public int getPlayerCards() {
         return playerCards;
@@ -38,6 +39,14 @@ public class Game {
         return ratioForBankerPlayerTie;
     }
 
+    public int getChosenOption() {
+        return chosenOption;
+    }
+
+    public void setChosenOption(int chosenOption) {
+        this.chosenOption = chosenOption;
+    }
+
     /*
      * Method: setRatioForBankerPlayerTie (setter method)
      * --------------------
@@ -55,9 +64,8 @@ public class Game {
             case 1 -> ratioForBankerPlayerTie = 1;
             case 2 -> ratioForBankerPlayerTie = 8;
             case 3 -> ratioForBankerPlayerTie = (float) 0.95;
-            default ->
-                    throw new IllegalArgumentException("Please choose a valid "
-                            + "option.");
+            default -> {
+            }
         }
     }
 
@@ -77,11 +85,8 @@ public class Game {
         this.amountOfMoney = amountOfMoney;
     }
 
-    public Game(int playerCards, int bankerCards, float ratioForBankerPlayerTie,
-                int placedBetAmount) {
-        this.playerCards = playerCards;
-        this.bankerCards = bankerCards;
-        this.ratioForBankerPlayerTie = ratioForBankerPlayerTie;
+    public Game(int chosenOption, int placedBetAmount) {
+        this.chosenOption = chosenOption;
         this.placedBetAmount = placedBetAmount;
     }
 
@@ -96,6 +101,7 @@ public class Game {
     Card playerHitCard;
 
     public int hitThirdCard(int thirdCardValue) {
+        System.out.println(sevenDeckOfCards.get(0).getRank() + " of " + sevenDeckOfCards.get(0).getSuit());
         thirdCardValue += sevenDeckOfCards.get(0).getRank().getValue();
         transferCards();
 
@@ -162,9 +168,12 @@ public class Game {
                 cardValue += sevenDeckOfCards.get(0).getRank().getValue();
             }
 
+            System.out.println(sevenDeckOfCards.get(0).getRank() + " of " + sevenDeckOfCards.get(0).getSuit());
+
             // no need to increment value for cards like 10, King, Queen, Jack.
 
             transferCards();
+
         }
 
         // Remove the 1st digit of the card and return it.
@@ -186,8 +195,15 @@ public class Game {
      */
 
     public void initializePlayerAndBanker() {
+        System.out.println("Player: ");
         playerCards = cardsChosen();
+
+        System.out.println("Player Two card value: " + playerCards);
+
+        System.out.println("Banker: ");
         bankerCards = cardsChosen();
+
+        System.out.println("Banker Two card value: " + bankerCards);
     }
 
     public void playerWon() {
@@ -212,6 +228,9 @@ public class Game {
      */
 
     public void determineTheWinner() {
+
+        System.out.println("Player Card value: " + playerCards);
+        System.out.println("Banker Card value: " + bankerCards);
 
         // Player won and Player chosen.
 
@@ -239,6 +258,7 @@ public class Game {
     }
 
     public void bankerHitThirdCardAndDetermineWinner() {
+        System.out.println("Banker Third Card: ");
         bankerCards = hitThirdCard(bankerCards);
         determineTheWinner();
     }
@@ -260,6 +280,7 @@ public class Game {
             // track the player hit third card.
 
             playerHitCard = sevenDeckOfCards.get(0);
+            System.out.println("Player Hit Third Card: ");
             playerCards = hitThirdCard(playerCards);
 
             if ((bankerCards >= 0) && (bankerCards <= 2)) {
@@ -272,6 +293,7 @@ public class Game {
                             bankerHitThirdCardAndDetermineWinner();
                             return;
                         }
+                        determineTheWinner();
                         break;
                     case 4:
                         if ((playerHitCard.getRank().getValue() != 1) &&
@@ -281,6 +303,7 @@ public class Game {
                             bankerHitThirdCardAndDetermineWinner();
                             return;
                         }
+                        determineTheWinner();
                         break;
                     case 5:
                         if ((playerHitCard.getRank().getValue() != 1) &&
@@ -292,6 +315,7 @@ public class Game {
                             bankerHitThirdCardAndDetermineWinner();
                             return;
                         }
+                        determineTheWinner();
                         break;
                     case 6:
                         if ((playerHitCard.getRank().getValue() == 6) ||
@@ -299,13 +323,12 @@ public class Game {
                             bankerHitThirdCardAndDetermineWinner();
                             return;
                         }
+                        determineTheWinner();
                         break;
                     case 7:
                         determineTheWinner();
                         return;
                     default:
-                        throw new IllegalArgumentException("Error with the " +
-                                "third card chosen");
 
                 }
             }
