@@ -110,4 +110,9 @@ public class UserPage {
     }
 
 
+    public void deleteAccount() {
+        System.out.println("Account Deleted.");
+    }
+
+
 }
